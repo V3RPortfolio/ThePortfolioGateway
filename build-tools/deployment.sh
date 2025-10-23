@@ -111,7 +111,7 @@ ssh -i $ssh_key $server "ls -lt --time-style=+%s ~/$application_name*.zip 2>/dev
 
 # 7. Move docker-compose.prod.yml to docker-compose.yml
 echo "Moving docker-compose.production.yml to docker-compose.yml"
-ssh -i $ssh_key $server "mv $remote_server_application_directory/docker-compose.production.yml $remote_server_application_directory/docker-compose.yml"
+#ssh -i $ssh_key $server "mv $remote_server_application_directory/docker-compose.production.yml $remote_server_application_directory/docker-compose.yml"
 
 # 8. Run migration and collectstatic for django application through docker compose
 echo "Running migration and collectstatic for API Gateway application"

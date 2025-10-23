@@ -34,4 +34,9 @@
     <ProjectReference Include="..\Package.Database\Package.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Include Include="Domain\Log\Log.cs" />
+    <!-- ...other PackageReference / Compile items... -->
+  </ItemGroup>
+
 </Project>

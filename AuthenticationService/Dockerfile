@@ -6,9 +6,19 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["AuthenticationService/AuthenticationService.csproj", "AuthenticationService/"]
-RUN dotnet restore "AuthenticationService/AuthenticationService.csproj"
+
+# Copy Packages
+# COPY ["Package.Database/", "Package.Database/"]
+# WORKDIR "/src/Package.Database"
+# RUN dotnet restore "Package.Database/Package.Database.csproj"
+# RUN dotnet build "Package.Database.csproj" -c Release -o /app/build
+
+WORKDIR /src
+
+# Copy AuthenticationService
+# COPY ["AuthenticationService/", "AuthenticationService/"]
 COPY . .
+RUN dotnet restore "AuthenticationService/AuthenticationService.csproj"
 WORKDIR "/src/AuthenticationService"
 RUN dotnet build "AuthenticationService.csproj" -c Release -o /app/build
 

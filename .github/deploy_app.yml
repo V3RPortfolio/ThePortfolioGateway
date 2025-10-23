@@ -54,5 +54,5 @@ jobs:
 
       - name: Deploy Resource Management Application
         run: |
-          chmod +x build-tools/deployment.sh && ./build-tools/deployment.sh -m $MODE -i $HOST -u $USERNAME -s ~/.ssh/id_rsa -c authenticationservice -d $(pwd) -a ThePortfolioGateway -r "$REMOTE_API_GATEWAY_DIRECTORY"
+          chmod +x build-tools/deployment.sh && ./build-tools/deployment.sh -m $MODE -i $HOST -u $USERNAME -s ~/.ssh/id_rsa -c authenticationservice -d $(pwd) -a the_portfolio_gateway -r "$REMOTE_API_GATEWAY_DIRECTORY"
         working-directory: ThePortfolioGateway

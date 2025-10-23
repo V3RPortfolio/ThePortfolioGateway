@@ -370,3 +370,4 @@ FodyWeavers.xsd
 !.vscode/tasks.json
 
 .env
+!AuthenticationService/Domain/Log/

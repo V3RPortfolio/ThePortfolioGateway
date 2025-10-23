@@ -371,3 +371,4 @@ FodyWeavers.xsd
 
 .env
 !AuthenticationService/Domain/Log/
+!AuthenticationService/Domain/Log/Log.cs

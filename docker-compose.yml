@@ -6,7 +6,14 @@ services:
       dockerfile: AuthenticationService/Dockerfile
 
     environment:
-      - OCELOT_RUNTIME_CATEGORY=docker
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - APPLICATION_HOST=http://authenticationservice:8005
+
+      - DB_HOST=${DB_HOST}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_ENCRYPT=${DB_ENCRYPT}
+      - DB_TRUSTSERVERCERTIFICATE=${DB_TRUSTSERVERCERTIFICATE}
 
     ports:
-      - "8005:8080"
+      - "8005:8005"

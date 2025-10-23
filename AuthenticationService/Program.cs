@@ -1,22 +1,39 @@
 using AuthenticationService;
+using System.IO;
 
 Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(builder =>
 {
-    var environmentName = Environment.GetEnvironmentVariable("OCELOT_RUNTIME_CATEGORY");
-    var isDocker = environmentName != null && environmentName.ToLower() == "docker";
+
+    var coreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+    var applicationHost = Environment.GetEnvironmentVariable("APPLICATION_HOST");
+    if (applicationHost == null) applicationHost = "http://localhost:8005";
+
+    var isDevelopment = coreEnvironment != null && coreEnvironment.ToLower() == "development";
     builder.UseStartup<Startup>();
-    if(!isDocker) builder.UseUrls("http://localhost:8005");
+
+
+    builder.UseUrls(applicationHost);
 
     builder.ConfigureAppConfiguration(config =>
     {
-        if(isDocker)
+        // Open ocelot.json and update the application host dynamically
+        var ocelotBaseUrlRegexpattern = "\"BaseUrl\":  \".*/api/v1\"";
+        var regex = new System.Text.RegularExpressions.Regex(ocelotBaseUrlRegexpattern);
+
+        var ocelotJsonPath = Path.Combine(Directory.GetCurrentDirectory(), "ocelot.json");
+        var ocelotJsonContent = File.ReadAllText(ocelotJsonPath);
+        var updatedOcelotJsonContent = regex.Replace(ocelotJsonContent, $"\"BaseUrl\":  \"{applicationHost}/api/v1\"");
+        File.WriteAllText(ocelotJsonPath, updatedOcelotJsonContent);
+
+        config.AddJsonFile("ocelot.json");
+
+        if (!isDevelopment)
         {
-            config.AddJsonFile("ocelot.docker.json");
-            config.AddJsonFile("appsettings.docker.json");
+            config.AddJsonFile("appsettings.json");
         }
         else
         {
-            config.AddJsonFile("ocelot.dev.json");
             config.AddJsonFile("appsettings.Development.json");
         }
     });

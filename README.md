@@ -167,7 +167,7 @@ GO
 
 ## Ocelot.json
 
-The files ocelot.dev.json and ocelot.docker.json in the 'AuthenticationService' project contains the mapping to route requests to different services. The documentation for Ocelot can be found at [https://ocelot.readthedocs.io/en/latest/introduction/bigpicture.html](https://ocelot.readthedocs.io/en/latest/introduction/bigpicture.html)
+The files ocelot.json and ocelot.docker.json in the 'AuthenticationService' project contains the mapping to route requests to different services. The documentation for Ocelot can be found at [https://ocelot.readthedocs.io/en/latest/introduction/bigpicture.html](https://ocelot.readthedocs.io/en/latest/introduction/bigpicture.html)
 
 
 ## Upgrading packages with .Net Target Framework

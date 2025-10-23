@@ -1,0 +1,38 @@
+// ...existing code...
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C#: Product Service (Launch & Debug)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/AuthenticationService/bin/Debug/net8.0/AuthenticationService.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/AuthenticationService",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000;https://localhost:5001"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "dotnetRunMessages": true,
+      "justMyCode": true
+    },
+    {
+      "name": "Attach to dotnet watch",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}",
+      "cwd": "${workspaceFolder}/AuthenticationService",
+      "justMyCode": true
+    }
+  ]
+}
+// ...existing code...

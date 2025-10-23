@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  authenticationservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080"
+
+  authenticationservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080"
+

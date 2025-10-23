@@ -1,0 +1,8 @@
+{
+  "Routes": [
+    
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://authenticationService:8080/api/v1"
+  }
+}

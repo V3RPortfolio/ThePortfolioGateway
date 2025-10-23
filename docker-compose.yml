@@ -1,0 +1,12 @@
+services:
+  authenticationservice:
+    image: ${DOCKER_REGISTRY-}authenticationservice
+    build:
+      context: .
+      dockerfile: AuthenticationService/Dockerfile
+
+    environment:
+      - OCELOT_RUNTIME_CATEGORY=docker
+
+    ports:
+      - "8005:8080"

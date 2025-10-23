@@ -27,7 +27,7 @@ namespace AuthenticationService
             services.AddOcelot().AddCacheManager(settings => settings.WithDictionaryHandle());
             services.AddSwaggerGen();
 
-            DependencyInjection.RegisterServices(services, authConnection);
+            // DependencyInjection.RegisterServices(services, authConnection);
             
         }
 

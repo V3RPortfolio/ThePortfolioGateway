@@ -1,6 +1,6 @@
 ﻿using AuthenticationService.Database.Dapper;
 using AuthenticationService.Database.EntityFramework.Context;
-using AuthenticationService.Domain.Log;
+using AuthenticationService.Domain.Logging;
 using Microsoft.EntityFrameworkCore;
 using Package.Database.EntityFramework;
 using Package.Database.EntityFramework.Interfaces;

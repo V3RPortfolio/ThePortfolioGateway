@@ -1,7 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AuthenticationService.Domain.Log
+namespace AuthenticationService.Domain.Logging
 {
     // [Table("Log", Schema = "dbo")]
     public class LogDto

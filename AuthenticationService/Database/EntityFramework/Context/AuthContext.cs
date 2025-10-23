@@ -1,5 +1,5 @@
 ﻿
-using AuthenticationService.Domain.Log;
+using AuthenticationService.Domain.Logging;
 using Microsoft.EntityFrameworkCore;
 using Package.Database.EntityFramework.Interfaces;
 

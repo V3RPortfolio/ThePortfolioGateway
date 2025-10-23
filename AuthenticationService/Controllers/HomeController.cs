@@ -8,7 +8,7 @@ namespace AuthenticationService.Controllers
     public class HomeController : ControllerBase
     {
         [AllowAnonymous]
-        [HttpGet("/health")]
+        [HttpGet("/")]
         public async Task<IActionResult> Health()
         {
             return Ok("Authentication Service is running...");

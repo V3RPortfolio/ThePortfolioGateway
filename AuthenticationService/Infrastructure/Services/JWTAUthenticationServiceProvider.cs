@@ -15,8 +15,8 @@ namespace AuthenticationService.Infrastructure.Services
                     options.ClaimsIssuer = issuer;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = issuer,

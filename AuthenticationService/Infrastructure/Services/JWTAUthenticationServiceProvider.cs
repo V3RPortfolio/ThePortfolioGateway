@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Text;
 
 namespace AuthenticationService.Infrastructure.Services
@@ -31,8 +30,8 @@ namespace AuthenticationService.Infrastructure.Services
         public static void RegisterIdentityServer(this IServiceCollection services)
         {
            var authority = "http://localhost:8000/openid";
-            var clientId = "579588";
-            var clientSecret = "fd156d29095eeb9a12a154d76e52b45f463389d7dbcc9a568b11b07d";
+            var clientId = "";
+            var clientSecret = "";
             var redirectUri = "http://localhost:8005/admin/";
 
             services.AddAuthentication(options =>

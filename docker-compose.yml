@@ -1,19 +1,25 @@
 services:
-  authenticationservice:
-    image: ${DOCKER_REGISTRY-}authenticationservice
+  gatewayservice:
+    image: ${DOCKER_REGISTRY-}gatewayservice
     build:
       context: .
       dockerfile: AuthenticationService/Dockerfile
 
+    container_name: gatewayservice
+
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - APPLICATION_HOST=http://authenticationservice:8005
-
-      - DB_HOST=${DB_HOST}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_ENCRYPT=${DB_ENCRYPT}
-      - DB_TRUSTSERVERCERTIFICATE=${DB_TRUSTSERVERCERTIFICATE}
+      - APPLICATION_HOST=http://gatewayservice:8005
+      - IS_DOCKER_ENVIRONMENT=true
 
     ports:
       - "8005:8005"
+
+    networks:
+      - platform_net
+
+networks:
+  platform_net:
+    driver: bridge
+    name: my-portfolio-network
+    external: true

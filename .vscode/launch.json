@@ -15,12 +15,7 @@
       "internalConsoleOptions": "neverOpen",
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APPLICATION_HOST": "http://localhost:8005",
-        "DB_HOST": "127.0.0.1",
-        "DB_USERNAME": "sa",
-        "DB_PASSWORD": "Admin@123",
-        "DB_ENCRYPT": "False",
-        "DB_TRUSTSERVERCERTIFICATE": "True"
+        "APPLICATION_HOST": "http://localhost:8005"
       },
       "serverReadyAction": {
         "action": "openExternally",

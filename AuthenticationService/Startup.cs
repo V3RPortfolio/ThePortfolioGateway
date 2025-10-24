@@ -16,15 +16,16 @@ namespace AuthenticationService
         private string GetDBConnectionString()
         {
             // "Data Source=host.docker.internal;Initial Catalog=portfolio_auth;User ID=sa;Password=Admin@123;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;Authentication=SqlPassword"
+            var section = Configuration.GetSection("DATABASE");
 
-            var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+            var dbHost = section.GetValue<string>("HOST");
             if (dbHost == null) dbHost = "127.0.0.1";
 
-            var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-            var dbUsername = Environment.GetEnvironmentVariable("DB_USERNAME");
-            var encrypt = Environment.GetEnvironmentVariable("DB_ENCRYPT");
+            var dbPassword = section.GetValue<string>("PASSWORD");
+            var dbUsername = section.GetValue<string>("SERNAME");
+            var encrypt = section.GetValue<string>("ENCRYPT");
             if(encrypt == null) encrypt = "False";
-            var trustServerCertificate = Environment.GetEnvironmentVariable("DB_TRUSTSERVERCERTIFICATE");
+            var trustServerCertificate = Environment.GetEnvironmentVariable("TRUSTSERVERCERTIFICATE");
             if(trustServerCertificate == null) trustServerCertificate = "True";
 
             var databaseName = Configuration.GetSection("ConnectionStrings").GetValue<string>("Database");
@@ -75,6 +76,7 @@ namespace AuthenticationService
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
             // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {

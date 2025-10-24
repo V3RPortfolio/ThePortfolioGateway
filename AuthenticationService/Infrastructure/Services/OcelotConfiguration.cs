@@ -54,12 +54,7 @@ namespace Infrastructure.Services
                         }
 
                     },
-                    new FileRoute()
-                    {
-                        DownstreamPathTemplate = "/static/{everything}",
-                        UpstreamPathTemplate = "/static/{everything}",
-                        UpstreamHttpMethod = new List<string>() { "Get" },
-                    },
+                    
                     new FileRoute()
                     {
                         DownstreamPathTemplate = "/api/auth/v1/{everything}",

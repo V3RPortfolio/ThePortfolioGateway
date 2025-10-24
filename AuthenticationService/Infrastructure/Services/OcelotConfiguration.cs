@@ -20,6 +20,8 @@ namespace Infrastructure.Services
     {
         public string Address { get; set;  } = "localhost";
         public int Port { get; set; } = 8080;
+
+        public string? Scheme { get; set; } = "http";
     }
 
     internal class OcelotRoute
@@ -44,12 +46,25 @@ namespace Infrastructure.Services
                         DownstreamPathTemplate = "/admin/{everything}",
                         UpstreamPathTemplate = "/admin/{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },
+
+                        AuthenticationOptions = new FileAuthenticationOptions()
+                        {
+                            // JWT Authentication
+                            AuthenticationProviderKeys = new[] { "Bearer" }
+                        }
+
                     },
                     new FileRoute()
                     {
                         DownstreamPathTemplate = "/static/{everything}",
                         UpstreamPathTemplate = "/static/{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/api/auth/v1/{everything}",
+                        UpstreamPathTemplate = "/auth/{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },
                     }
                 }
             },
@@ -62,11 +77,16 @@ namespace Infrastructure.Services
             foreach (var route in Routes)
             {
                 var hosts = new List<FileHostAndPort>();
+                var scheme = "http";
                 foreach (var server in route.Servers)
                 {
                     if (serverAddressMap.TryGetValue(server.ServerAddress.ToString(), out var address))
                     {
                         hosts.Add(new FileHostAndPort(address.Address, address.Port));
+                        if(address.Scheme?.ToLower() == "https")
+                        {
+                            scheme = address.Scheme;
+                        }
                     }
                 }
 
@@ -80,7 +100,7 @@ namespace Infrastructure.Services
                     fileRoute.DownstreamHostAndPorts = hosts;
                     if (fileRoute.DownstreamScheme == null)
                     {
-                        fileRoute.DownstreamScheme = "http";
+                        fileRoute.DownstreamScheme = scheme;
                     }
 
                     if (fileRoute.UpstreamHttpMethod == null || fileRoute.UpstreamHttpMethod.Count == 0)

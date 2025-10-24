@@ -189,3 +189,5 @@ dotnet add ProductService/ProductService.csproj package Microsoft.Extensions.Hos
 dotnet restore
 dotnet build
 ```
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc2MTMzMjU3OCwicm9sZXMiOlsiZ3Vlc3QiXX0.jFW7jXRIdy-t5_ia_34oHJirPSh_a96zgF3xEL1fChY

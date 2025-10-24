@@ -7,7 +7,9 @@
       "AuthenticationOptions": {
         "AllowedScopes": [],
         "AuthenticationProviderKey": null,
-        "AuthenticationProviderKeys": []
+        "AuthenticationProviderKeys": [
+          "Bearer"
+        ]
       },
       "ChangeDownstreamPathTemplate": {},
       "DangerousAcceptAnyServerCertificateValidator": false,
@@ -15,15 +17,15 @@
       "DownstreamHeaderTransform": {},
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8000
+          "Host": "djadmin.vip3rtech6069.com",
+          "Port": 443
         }
       ],
       "DownstreamHttpMethod": null,
       "DownstreamHttpVersion": null,
       "DownstreamHttpVersionPolicy": null,
       "DownstreamPathTemplate": "/admin/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "FileCacheOptions": {
         "TtlSeconds": null,
         "Region": null,
@@ -95,15 +97,15 @@
       "DownstreamHeaderTransform": {},
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8000
+          "Host": "djadmin.vip3rtech6069.com",
+          "Port": 443
         }
       ],
       "DownstreamHttpMethod": null,
       "DownstreamHttpVersion": null,
       "DownstreamHttpVersionPolicy": null,
       "DownstreamPathTemplate": "/static/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "FileCacheOptions": {
         "TtlSeconds": null,
         "Region": null,
@@ -156,6 +158,86 @@
         "Get"
       ],
       "UpstreamPathTemplate": "/static/{everything}"
+    },
+    {
+      "AddClaimsToRequest": {},
+      "AddHeadersToRequest": {},
+      "AddQueriesToRequest": {},
+      "AuthenticationOptions": {
+        "AllowedScopes": [],
+        "AuthenticationProviderKey": null,
+        "AuthenticationProviderKeys": []
+      },
+      "ChangeDownstreamPathTemplate": {},
+      "DangerousAcceptAnyServerCertificateValidator": false,
+      "DelegatingHandlers": [],
+      "DownstreamHeaderTransform": {},
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "djadmin.vip3rtech6069.com",
+          "Port": 443
+        }
+      ],
+      "DownstreamHttpMethod": null,
+      "DownstreamHttpVersion": null,
+      "DownstreamHttpVersionPolicy": null,
+      "DownstreamPathTemplate": "/api/auth/v1/{everything}",
+      "DownstreamScheme": "https",
+      "FileCacheOptions": {
+        "TtlSeconds": null,
+        "Region": null,
+        "Header": null,
+        "EnableContentHashing": null
+      },
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": false,
+        "MaxConnectionsPerServer": 2147483647,
+        "PooledConnectionLifetimeSeconds": null,
+        "UseCookieContainer": false,
+        "UseProxy": false,
+        "UseTracing": false
+      },
+      "Key": null,
+      "LoadBalancerOptions": {
+        "Expiry": 2147483647,
+        "Key": "",
+        "Type": ""
+      },
+      "Metadata": {},
+      "Priority": 1,
+      "QoSOptions": {
+        "DurationOfBreak": 1,
+        "ExceptionsAllowedBeforeBreaking": 0,
+        "TimeoutValue": 0
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": false,
+        "Limit": 0,
+        "Period": null,
+        "PeriodTimespan": 0.0
+      },
+      "RequestIdKey": null,
+      "RouteClaimsRequirement": {},
+      "RouteIsCaseSensitive": false,
+      "SecurityOptions": {
+        "IPAllowedList": [],
+        "IPBlockedList": [],
+        "ExcludeAllowedFromBlocked": false
+      },
+      "ServiceName": null,
+      "ServiceNamespace": null,
+      "Timeout": 0,
+      "UpstreamHeaderTemplates": {},
+      "UpstreamHeaderTransform": {},
+      "UpstreamHost": null,
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "UpstreamPathTemplate": "/auth/{everything}"
     }
   ],
   "DynamicRoutes": [],

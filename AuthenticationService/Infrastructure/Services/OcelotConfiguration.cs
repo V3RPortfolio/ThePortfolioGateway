@@ -80,10 +80,46 @@ namespace Infrastructure.Services
                 {
                     new FileRoute()
                     {
-                        DownstreamPathTemplate = "/wp-json/wp/v2/{everything}",
-                        UpstreamPathTemplate = "/cms/{everything}",
+                        DownstreamPathTemplate = "/wp-json/wp/v2/posts{everything}",
+                        UpstreamPathTemplate = "/cms/posts{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get" },
-                    }
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-json/wp/v2/categories{everything}",
+                        UpstreamPathTemplate = "/cms/categories{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-json/wp/v2/tags{everything}",
+                        UpstreamPathTemplate = "/cms/tags{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-json/wp/v2/users{everything}",
+                        UpstreamPathTemplate = "/cms/users{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-json/wp/v2/media{everything}",
+                        UpstreamPathTemplate = "/cms/media{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-json-openapi{everything}",
+                        UpstreamPathTemplate = "/cms/json-openapi{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-content/uploads{everything}",
+                        UpstreamPathTemplate = "/wp-content/uploads{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
                 }
             }
 

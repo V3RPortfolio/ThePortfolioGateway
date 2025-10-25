@@ -16,6 +16,7 @@ env:
   GTHB_PAT: '${{ secrets.GTHB_PAT }}'
 
   AUTHENTICATION_SERVICE: 'authenticationservice'
+  AUTHENTICATION_SERVICE_PORT: '${{ vars.DJANGO_ADMIN_LOCAL_PORT }}'
 
   CMS_SERVICE: 'cms'
   CMS_SERVICE_PORT: '8080'
@@ -72,36 +73,27 @@ jobs:
           python3 - <<'PY'
           import os, sys, base64
           from pathlib import Path
-
           TARGET_FILE = "appsettings.Production.json"
           p = Path(TARGET_FILE)
-
           if not p.is_file():
               print(f"Error: {TARGET_FILE} not found in {p.cwd()}")
               sys.exit(1)
-
           replacements = {
-              "#AuthenticationServiceHost": "${{ AUTHENTICATION_SERVICE }}",
-              '"#AuthenticationServicePort"': ${{ vars.DJANGO_ADMIN_LOCAL_PORT }},
-
-              "#CMSServiceHost": "${{ CMS_SERVICE }}"",
-              '"#CMSServicePort"': ${{ CMS_SERVICE_PORT }},
-              "#CMSServiceAuthorization": "Basic " + base64.b64encode(bytes("${{ CMS_SERVICE_AUTHORIZATION }}", 'utf-8')).decode('utf-8'),
-
-              "#DBHost": "${{ APIGATEWAY_DB_HOST }}",
-              '"#DBPort"': ${{ APIGATEWAY_DB_PORT }},
-              "#DBPassword": "${{ APIGATEWAY_ADMIN_DB_PASSWORD }}",
-              "#DBUsername": "${{ APIGATEWAY_ADMIN_DB_USERNAME }}",
-
-              "#JWTIssuer": "${{ AUTHENTICATION_SERVICE_JWT_ISSUER }}",
-              "#JWTKey": "${{ AUTHENTICATION_SERVICE_JWT_KEY }}",
+              "#AuthenticationServiceHost": os.getenv("AUTHENTICATION_SERVICE", ""),
+              '"#AuthenticationServicePort"': os.getenv("AUTHENTICATION_SERVICE_PORT", ""),
+              "#CMSServiceHost": os.getenv("CMS_SERVICE", ""),
+              '"#CMSServicePort"': os.getenv("CMS_SERVICE_PORT", ""),
+              "#CMSServiceAuthorization": "Basic " + base64.b64encode(bytes(os.getenv("CMS_SERVICE_AUTHORIZATION", ""), 'utf-8')).decode('utf-8'),
+              "#DBHost": os.getenv("APIGATEWAY_DB_HOST", ""),
+              '"#DBPort"': os.getenv("APIGATEWAY_DB_PORT", ""),
+              "#DBPassword": os.getenv("APIGATEWAY_ADMIN_DB_PASSWORD", ""),
+              "#DBUsername": os.getenv("APIGATEWAY_ADMIN_DB_USERNAME", ""),
+              "#JWTIssuer": os.getenv("AUTHENTICATION_SERVICE_JWT_ISSUER", ""),
+              "#JWTKey": os.getenv("AUTHENTICATION_SERVICE_JWT_KEY", ""),
           }
-
           content = p.read_text(encoding='utf-8')
           for k, v in replacements.items():
-              content = content.replace(k, v)
-
-          
+              content = content.replace(k, v)          
           output_file = "appsettings.Docker.json"
           p.with_name(output_file).write_text(content, encoding='utf-8')
           print(f"Updated {output_file}")

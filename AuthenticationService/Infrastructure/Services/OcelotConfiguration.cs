@@ -50,6 +50,13 @@ namespace Infrastructure.Services
                 {
                     new FileRoute()
                     {
+                        DownstreamPathTemplate = "/csrf/",
+                        UpstreamPathTemplate = "/admin/csrf/",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+
+                    new FileRoute()
+                    {
                         DownstreamPathTemplate = "/admin/{everything}",
                         UpstreamPathTemplate = "/admin/{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },
@@ -66,7 +73,14 @@ namespace Infrastructure.Services
                         DownstreamPathTemplate = "/api/auth/v1/{everything}",
                         UpstreamPathTemplate = "/auth/{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },
-                    }
+                    },
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/github/graphql/v1{everything}",
+                        UpstreamPathTemplate = "/github/graphql/v1{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },
+                    },
+
                 }
             },
 

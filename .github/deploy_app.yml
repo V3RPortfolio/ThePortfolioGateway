@@ -6,10 +6,24 @@ env:
   HOST: '${{ secrets.HOST }}'
   USERNAME: '${{ secrets.USERNAME }}'
   PASSWORD: '${{ secrets.PASSWORD }}'
+
   APIGATEWAY_DB_HOST: '${{ secrets.APIGATEWAY_DB_HOST }}'
+  APIGATEWAY_DB_PORT: '1433'
+  APIGATEWAY_ADMIN_DB_USERNAME: 'sa'
   APIGATEWAY_ADMIN_DB_PASSWORD: '${{ secrets.APIGATEWAY_ADMIN_DB_PASSWORD }}'
+
   REMOTE_API_GATEWAY_DIRECTORY: '${{ secrets.REMOTE_API_GATEWAY_DIRECTORY }}'
-  GTHB_PAT: '${{ secrets.GTHB_PAT }}'  
+  GTHB_PAT: '${{ secrets.GTHB_PAT }}'
+
+  AUTHENTICATION_SERVICE: 'authenticationservice'
+  AUTHENTICATION_SERVICE_PORT: '8080'
+
+  CMS_SERVICE: 'cms'
+  CMS_SERVICE_PORT: '8080'
+  CMS_SERVICE_AUTHORIZATION: '${{ secrets.CMS_SERVICE_AUTHORIZATION }}'
+
+  AUTHENTICATION_SERVICE_JWT_ISSUER: 'djadmin.vip3rtech6069.com'
+  AUTHENTICATION_SERVICE_JWT_KEY: '${{ secrets.DJANGO_JWT_SECRET_KEY }}'
 
   # Variables
   MODE: prod
@@ -30,6 +44,11 @@ jobs:
       - name: Update submodule
         run: git submodule update --recursive --remote
 
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
       - name: Create ssh directory
         run: mkdir ~/.ssh
 
@@ -43,14 +62,53 @@ jobs:
       - name: Generate env file
         run: |
           echo "ASPNETCORE_ENVIRONMENT=$MODE" >> .env
-          echo "APPLICATION_HOST=https://vip3rtech6069.com:8005" >> .env
-          echo "DB_HOST=$APIGATEWAY_DB_HOST" >> .env
-          echo "DB_USERNAME=sa" >> .env
-          echo "DB_PASSWORD=$APIGATEWAY_ADMIN_DB_PASSWORD" >> .env
-          echo "DB_ENCRYPT=True" >> .env
-          echo "DB_TRUSTSERVERCERTIFICATE=True" >> .env
+          echo "APPLICATION_HOST=https://gateway.vip3rtech6069.com" >> .env
+          echo "IS_DOCKER_ENVIRONMENT=True" >> .env
           cat .env
         working-directory: ThePortfolioGateway
+
+
+      - name: Generate appsettings file
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          from pathlib import Path
+
+          TARGET_FILE = "appsettings.Production.json"
+          p = Path(TARGET_FILE)
+
+          if not p.is_file():
+              print(f"Error: {TARGET_FILE} not found in {p.cwd()}")
+              sys.exit(1)
+
+          replacements = {
+              "#AuthenticationServiceHost": "${{ AUTHENTICATION_SERVICE }}",
+              '"#AuthenticationServicePort"': ${{ AUTHENTICATION_SERVICE_PORT }},
+
+              "#CMSServiceHost": "${{ CMS_SERVICE }}"",
+              '"#CMSServicePort"': ${{ CMS_SERVICE_PORT }},
+              "#CMSServiceAuthorization": "${{ CMS_SERVICE_AUTHORIZATION }}",
+
+              "#DBHost": "${{ APIGATEWAY_DB_HOST }}",
+              '"#DBPort"': ${{ APIGATEWAY_DB_PORT }},
+              "#DBPassword": "${{ APIGATEWAY_ADMIN_DB_PASSWORD }}",
+              "#DBUsername": "${{ APIGATEWAY_ADMIN_DB_USERNAME }}",
+
+              "#JWTIssuer": "${{ AUTHENTICATION_SERVICE_JWT_ISSUER }}",
+              "#JWTKey": "${{ AUTHENTICATION_SERVICE_JWT_KEY }}",
+          }
+
+          content = p.read_text(encoding='utf-8')
+          for k, v in replacements.items():
+              content = content.replace(k, v)
+
+          
+          output_file = "appsettings.Docker.json"
+          p.with_name(output_file).write_text(content, encoding='utf-8')
+          print(f"Updated {output_file}")
+          PY
+
+        working-directory: ThePortfolioGateway/AuthenticationService
 
       - name: Deploy Resource Management Application
         run: |

@@ -8,25 +8,31 @@ namespace Infrastructure.Services
     internal enum Server
     {
         AuthenticationService,
-    }
-
-    internal class ServerSocket
-    {
-        public Server ServerAddress { get; set; }
-        public int ServerPort { get; set; } = 8080;
+        CMSService
     }
 
     internal class MappedServerAddress
     {
-        public string Address { get; set;  } = "localhost";
+        public string Address { get; set; } = "localhost";
         public int Port { get; set; } = 8080;
+    }
 
-        public string? Scheme { get; set; } = "http";
+    internal class MappedService
+    {
+        public List<MappedServerAddress> Servers { get; set; } = new List<MappedServerAddress>();
+        public string? Scheme { get; set; } = string.Empty;
+        public string? AuthorizationKey { get; set; }
+
+    }
+    
+    internal class Service: MappedService
+    {
+        public Server ServiceName { get; set; }
     }
 
     internal class OcelotRoute
     {
-        public List<ServerSocket> Servers { get; set; } = new List<ServerSocket>();
+        public Service Service { get; set; } = new Service();
         public List<FileRoute> Routes { get; set; } = new List<FileRoute>();
     }
 
@@ -36,8 +42,9 @@ namespace Infrastructure.Services
         {
             new OcelotRoute
             {
-                Servers = new List<ServerSocket>() {
-                    new ServerSocket() { ServerAddress = Server.AuthenticationService }
+                Service = new Service()
+                {
+                    ServiceName = Server.AuthenticationService
                 },
                 Routes = new List<FileRoute>()
                 {
@@ -54,7 +61,6 @@ namespace Infrastructure.Services
                         // }
 
                     },
-                    
                     new FileRoute()
                     {
                         DownstreamPathTemplate = "/api/auth/v1/{everything}",
@@ -63,58 +69,59 @@ namespace Infrastructure.Services
                     }
                 }
             },
+
+            new OcelotRoute()
+            {
+                Service = new Service()
+                {
+                    ServiceName = Server.CMSService
+                },
+                Routes = new List<FileRoute>()
+                {
+                    new FileRoute()
+                    {
+                        DownstreamPathTemplate = "/wp-json/wp/v2/{everything}",
+                        UpstreamPathTemplate = "/cms/{everything}",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    }
+                }
+            }
+
+
         };
 
-        List<FileRoute> GenerateRoutes(IDictionary<string, MappedServerAddress> serverAddressMap)
+        List<FileRoute> GenerateRoutes(IDictionary<string, MappedService> serverAddressMap)
         {
             var routes = new List<FileRoute>();
-
             foreach (var route in Routes)
             {
-                var hosts = new List<FileHostAndPort>();
-                var scheme = "http";
-                foreach (var server in route.Servers)
-                {
-                    if (serverAddressMap.TryGetValue(server.ServerAddress.ToString(), out var address))
-                    {
-                        hosts.Add(new FileHostAndPort(address.Address, address.Port));
-                        if(address.Scheme?.ToLower() == "https")
-                        {
-                            scheme = address.Scheme;
-                        }
-                    }
-                }
+                if (route.Routes == null || route.Routes.Count == 0) continue;
+                var serviceName = route.Service.ServiceName.ToString();
+                if (!serverAddressMap.ContainsKey(serviceName)) continue;
+                if (serverAddressMap[serviceName].Servers == null || serverAddressMap[serviceName].Servers.Count == 0) continue;
 
-                if (hosts.Count == 0)
-                {
-                    continue;
-                }
+                route.Service.Servers = serverAddressMap[serviceName].Servers;
+                route.Service.AuthorizationKey = serverAddressMap[serviceName].AuthorizationKey;
+                if (!string.IsNullOrEmpty(serverAddressMap[serviceName].Scheme)) route.Service.Scheme = serverAddressMap[serviceName].Scheme;
 
-                foreach (var fileRoute in route.Routes)
+                foreach(var path in route.Routes)
                 {
-                    fileRoute.DownstreamHostAndPorts = hosts;
-                    if (fileRoute.DownstreamScheme == null)
-                    {
-                        fileRoute.DownstreamScheme = scheme;
-                    }
+                    path.DownstreamHostAndPorts = route.Service.Servers.Select(x => new FileHostAndPort(x.Address, x.Port)).ToList();
+                    path.DownstreamScheme = route.Service.Scheme;
 
-                    if (fileRoute.UpstreamHttpMethod == null || fileRoute.UpstreamHttpMethod.Count == 0)
-                    {
-                        fileRoute.UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete", "Patch", "Options" };
-                    }
-                    
-                    if(fileRoute.LoadBalancerOptions == null)
-                    {
-                        fileRoute.LoadBalancerOptions = new FileLoadBalancerOptions()
+                    if (path.UpstreamHttpMethod == null || path.UpstreamHttpMethod.Count == 0)
+                        path.UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete", "Patch", "Options" };
+
+                    if (path.LoadBalancerOptions == null)
+                        path.LoadBalancerOptions = new FileLoadBalancerOptions()
                         {
                             Type = "RoundRobin"
                         };
-                    }
-                    
-                    routes.Add(fileRoute);
-                }
 
+                    routes.Add(path);
+                }
             }
+            
 
             return routes;
         }
@@ -152,12 +159,12 @@ namespace Infrastructure.Services
                 return;
             }
             
-            var gatewayServices = new Dictionary<string, MappedServerAddress>();
+            var gatewayServices = new Dictionary<string, MappedService>();
             
             if(appSettings.ContainsKey("GATEWAY_SERVICES"))
             {
                 var gatewayServicesJson = appSettings["GATEWAY_SERVICES"]?.ToString() ?? "{}";
-                gatewayServices = JsonConvert.DeserializeObject<Dictionary<string, MappedServerAddress>>(gatewayServicesJson) ?? new Dictionary<string, MappedServerAddress>();
+                gatewayServices = JsonConvert.DeserializeObject<Dictionary<string, MappedService>>(gatewayServicesJson) ?? new Dictionary<string, MappedService>();
             }
 
             var routes = GenerateRoutes(gatewayServices);

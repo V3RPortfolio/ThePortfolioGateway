@@ -128,12 +128,6 @@ namespace Infrastructure.Services
                         UpstreamPathTemplate = "/cms/json-openapi{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get" },
                     },
-                    new FileRoute()
-                    {
-                        DownstreamPathTemplate = "/wp-content/uploads{everything}",
-                        UpstreamPathTemplate = "/wp-content/uploads{everything}",
-                        UpstreamHttpMethod = new List<string>() { "Get" },
-                    },
                 }
             }
 

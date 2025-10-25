@@ -47,11 +47,11 @@ namespace Infrastructure.Services
                         UpstreamPathTemplate = "/admin/{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },
 
-                        AuthenticationOptions = new FileAuthenticationOptions()
-                        {
-                            // JWT Authentication
-                            AuthenticationProviderKeys = new[] { "Bearer" }
-                        }
+                        // AuthenticationOptions = new FileAuthenticationOptions()
+                        // {
+                        //     // JWT Authentication
+                        //     AuthenticationProviderKeys = new[] { "Bearer" }
+                        // }
 
                     },
                     

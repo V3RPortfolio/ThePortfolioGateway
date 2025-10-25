@@ -50,8 +50,8 @@ namespace Infrastructure.Services
                 {
                     new FileRoute()
                     {
-                        DownstreamPathTemplate = "/csrf/",
-                        UpstreamPathTemplate = "/admin/csrf/",
+                        DownstreamPathTemplate = "/csrf{everything}",
+                        UpstreamPathTemplate = "/csrf{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get" },
                     },
 

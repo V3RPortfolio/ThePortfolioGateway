@@ -16,13 +16,12 @@ env:
   GTHB_PAT: '${{ secrets.GTHB_PAT }}'
 
   AUTHENTICATION_SERVICE: 'authenticationservice'
-  AUTHENTICATION_SERVICE_PORT: '8080'
 
   CMS_SERVICE: 'cms'
   CMS_SERVICE_PORT: '8080'
-  CMS_SERVICE_AUTHORIZATION: '${{ secrets.CMS_SERVICE_AUTHORIZATION }}'
+  CMS_SERVICE_AUTHORIZATION: '${{ secrets.WORDPRESS_DB_USER }}:${{ secrets.WORDPRESS_DB_PASSWORD }}'
 
-  AUTHENTICATION_SERVICE_JWT_ISSUER: 'djadmin.vip3rtech6069.com'
+  AUTHENTICATION_SERVICE_JWT_ISSUER: ''
   AUTHENTICATION_SERVICE_JWT_KEY: '${{ secrets.DJANGO_JWT_SECRET_KEY }}'
 
   # Variables
@@ -71,7 +70,7 @@ jobs:
       - name: Generate appsettings file
         run: |
           python3 - <<'PY'
-          import os, sys
+          import os, sys, base64
           from pathlib import Path
 
           TARGET_FILE = "appsettings.Production.json"
@@ -83,11 +82,11 @@ jobs:
 
           replacements = {
               "#AuthenticationServiceHost": "${{ AUTHENTICATION_SERVICE }}",
-              '"#AuthenticationServicePort"': ${{ AUTHENTICATION_SERVICE_PORT }},
+              '"#AuthenticationServicePort"': ${{ vars.DJANGO_ADMIN_LOCAL_PORT }},
 
               "#CMSServiceHost": "${{ CMS_SERVICE }}"",
               '"#CMSServicePort"': ${{ CMS_SERVICE_PORT }},
-              "#CMSServiceAuthorization": "${{ CMS_SERVICE_AUTHORIZATION }}",
+              "#CMSServiceAuthorization": "Basic " + base64.b64encode(bytes("${{ CMS_SERVICE_AUTHORIZATION }}", 'utf-8')).decode('utf-8'),
 
               "#DBHost": "${{ APIGATEWAY_DB_HOST }}",
               '"#DBPort"': ${{ APIGATEWAY_DB_PORT }},

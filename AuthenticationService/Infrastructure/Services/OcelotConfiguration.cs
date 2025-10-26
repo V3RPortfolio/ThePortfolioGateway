@@ -70,6 +70,12 @@ namespace Infrastructure.Services
                     },
                     new FileRoute()
                     {
+                        DownstreamPathTemplate = "/api/docs",
+                        UpstreamPathTemplate = "/auth/docs",
+                        UpstreamHttpMethod = new List<string>() { "Get" },
+                    },
+                    new FileRoute()
+                    {
                         DownstreamPathTemplate = "/api/auth/v1/{everything}",
                         UpstreamPathTemplate = "/auth/{everything}",
                         UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete" },

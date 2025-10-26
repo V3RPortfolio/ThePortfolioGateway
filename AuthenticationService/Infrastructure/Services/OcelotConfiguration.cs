@@ -161,6 +161,7 @@ namespace Infrastructure.Services
 
                     if (path.UpstreamHttpMethod == null || path.UpstreamHttpMethod.Count == 0)
                         path.UpstreamHttpMethod = new List<string>() { "Get", "Post", "Put", "Delete", "Patch", "Options" };
+                    else if(!path.UpstreamHttpMethod.Contains("Options")) path.UpstreamHttpMethod.Add("Options");
 
                     if (path.LoadBalancerOptions == null)
                         path.LoadBalancerOptions = new FileLoadBalancerOptions()

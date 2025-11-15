@@ -370,3 +370,5 @@ FodyWeavers.xsd
 !.vscode/tasks.json
 
 .env
+
+appsettings.Standalone.json

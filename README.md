@@ -190,3 +190,9 @@ dotnet restore
 dotnet build
 ```
 
+### Building Application
+
+```bash
+dotnet build Package.Database
+dotnet build AuthenticationService 
+```
